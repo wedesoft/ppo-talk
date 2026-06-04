@@ -1,0 +1,74 @@
+\documentclass[aspectratio=169,11pt,xcolor=dvipsnames]{beamer}
+\usepackage{graphicx} % For including graphics.
+\usepackage{hyperref} % For links.
+\usepackage{multimedia}
+\usepackage{transparent}
+\usepackage{tikz}
+\usepackage{minted}
+
+\title{Proximal Policy Optimization}
+\subtitle{A reinforcement learning method}
+\author{Jan Wedekind}
+\date{Thursday, June 4th 2026}
+
+\hypersetup{pdftitle          = {Proximal Policy Optimization},
+            pdfsubject        = {A reinforcement learning method},
+            pdfauthor         = {Jan Wedekind},
+            pdfkeywords       = {reinforcement learning, policy, actor, critic},
+            pdfcreator        = {LaTeX with Beamer class},
+            pdfproducer       = {TeX Live 2024 on Debian},
+            bookmarksopen     = false,
+            bookmarksnumbered = true,
+            colorlinks        = true,
+            filecolor         = cyan,
+            citecolor         = green,
+            linkcolor         = blue,
+            urlcolor          = blue}
+
+\pdfcompresslevel=9
+
+\definecolor{slidecolor}{rgb}{0.65,0.71,0.72}
+\definecolor{bluish}{rgb}{0.678,0.678,0.878}
+\definecolor{lightred}{rgb}{1.0, 0.9, 0.9}
+
+
+\usebackgroundtemplate{
+  {\transparent{0.6}\includegraphics[width=\paperwidth,height=\paperheight]{slide}}
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west,yshift=-0.05cm,xshift=0.0cm] at (current page.south west) {
+      \begin{tiny}
+        \hypersetup{urlcolor=bluish}
+        \url{https://www.wedesoft.de/downloads/ppo.pdf}
+        \hypersetup{urlcolor=blue}
+      \end{tiny}};
+    \node[anchor=south, yshift=-0.05cm, xshift=0.0cm] at (current page.south) {
+      \begin{tiny}
+        \textcolor{bluish}{\insertframenumber/\inserttotalframenumber}
+      \end{tiny}};
+  \end{tikzpicture}
+}
+
+\setbeamersize{text margin left=0.5cm,
+               text margin right=0.5cm}
+\addtobeamertemplate{frametitle}{}{\vspace{-0.3cm}}
+
+\usecolortheme{seahorse}
+
+\setbeamercolor{titlelike}{fg=black,bg=slidecolor!60}
+\setbeamercolor{frametitle}{fg=black,bg=slidecolor!100}
+
+% pygmentize -L styles
+\usemintedstyle{default}
+\setminted{highlightcolor=lightred}
+
+\begin{document}
+
+\begin{frame}
+  \pdfbookmark[1]{Title}{title}
+  \begin{center}
+  \titlepage{}
+  \end{center}
+\end{frame}
+
+\end{document}
+
