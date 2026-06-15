@@ -239,5 +239,30 @@
   \end{center}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Pendulum Environment}
+  \begin{minipage}[c]{0.48\textwidth}
+    \begin{itemize}
+      \item \textbf{Task:} Swing up and balance pendulum in upright position.
+      \item \textbf{Observation:} $(\cos\theta, \sin\theta, \dot{\theta})$
+      \item \textbf{Action:} Continuous torque $u \in [-2, 2]$
+      \item \textbf{Reward:} $-(\theta^2 + 0.1\dot{\theta}^2 + 0.001u^2)$
+      \item \textbf{Episode:} Truncate after 200 steps, no termination.
+    \end{itemize}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{pendulum}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Actor--Critic in Reinforcement Learning}
+  \begin{itemize}
+    \item \textbf{Actor}: learns probability density function $\pi_\theta(a_t|s_t)$ to sample action $a_t$ when in state $s_t$.
+    \item \textbf{Critic}: learns to estimate the expected cumulative reward $V(s_t)$ for state $s_t$.
+  \end{itemize}
+\end{frame}
+
 \end{document}
 
