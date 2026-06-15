@@ -1,6 +1,7 @@
 \documentclass[aspectratio=169,11pt,xcolor=dvipsnames]{beamer}
 \usepackage{graphicx} % For including graphics.
 \usepackage{hyperref} % For links.
+\usepackage{booktabs}
 \usepackage{multimedia}
 \usepackage{transparent}
 \usepackage{tikz}
@@ -67,6 +68,174 @@
   \pdfbookmark[1]{Title}{title}
   \begin{center}
   \titlepage{}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \pdfbookmark[1]{Gymnasium}{gymnasium}
+  \frametitle{Gymnasium}
+  \begin{center}
+    \begin{minipage}{.24\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth]{pendulum}\\
+        Pendulum
+      \end{center}
+    \end{minipage}
+    \begin{minipage}{.36\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth]{lander}\\
+        Lunar Lander
+      \end{center}
+    \end{minipage}
+    \begin{minipage}{.35\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth]{cartpole}\\
+        Cartpole
+      \end{center}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \pdfbookmark[1]{Environment}{environment}
+  \frametitle{Environment}
+  Types of values
+  \begin{itemize}
+    \item \emph{observation}: input for agent
+    \item \emph{action}: output of agent
+    \item \emph{reward}: score for action and state
+    \item \emph{terminated}: target state was achieved
+    \item \emph{truncated}: timeout or agent out of bounds
+  \end{itemize}
+  Abstract \emph{environment} interface
+  \begin{itemize}
+    \item \emph{reset}: seed $\rightarrow$ state, observation
+    \item \emph{step}: state, action $\rightarrow$ state, observation, reward, terminated, truncated
+    \item \emph{render}
+    \item \emph{close}
+  \end{itemize}
+  \medskip
+  \href{https://gymnasium.farama.org/api/env/}{https://gymnasium.farama.org/api/env/}
+\end{frame}
+
+\begin{frame}
+  \pdfbookmark[1]{Pendulum Environment}{pendulum}
+  \frametitle{Pendulum Environment}
+  \begin{center}
+    \begin{minipage}{.32\textwidth}
+      State
+      \begin{itemize}
+        \item $\theta$, angle of pendulum
+        \item $\dot{\theta}$, angular velocity
+        \item $t$, time
+      \end{itemize}
+    \end{minipage}
+    \begin{minipage}{.2\textwidth}
+      Action
+      \begin{itemize}
+        \item $\alpha_m$, motor angular acceleration
+      \end{itemize}
+    \end{minipage}
+    \begin{minipage}{.32\textwidth}
+      Observation
+      \begin{itemize}
+        \item $x=\cos(\theta)$, pendulum x
+        \item $y=\sin(\theta)$, pendulum y
+        \item $\dot{\theta}$, angular velocity
+      \end{itemize}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \pdfbookmark[1]{Angular Acceleration from Gravity}{gravity-acceleration}
+  \frametitle{Angular Acceleration from Gravity}
+  \begin{center}
+    \begin{minipage}{.75\textwidth}
+      Using pendulum length $\ell$ and gravity $g$, the gravitational torque is
+      \begin{equation*}
+        \tau_g = m g \ell \sin(\theta)
+      \end{equation*}
+      The angular acceleration $\ddot{\theta}$ is
+      \begin{equation*}
+        \ddot{\theta} = \frac{\tau_g}{I}
+      \end{equation*}
+      Using point mass pendulum rotational inertia $I = m \ell^2$
+      \begin{equation*}
+        \ddot{\theta} = \frac{g}{\ell}\sin(\theta)
+      \end{equation*}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \pdfbookmark[1]{Pendulum State Update}{pendulum-state-update}
+  \frametitle{Pendulum State Update}
+  \begin{center}
+    \begin{minipage}{.8\textwidth}
+      Total angular acceleration is the sum of motor input and gravity:
+      \begin{equation*}
+        \ddot{\theta}_t = \alpha_m + \frac{g}{\ell}\sin(\theta_t)
+      \end{equation*}
+
+      Using a time step $\Delta t$, Euler integration first updates the angular velocity:
+      \begin{equation*}
+        \dot{\theta}_{t+1} = \dot{\theta}_t + \ddot{\theta}_t \Delta t
+      \end{equation*}
+
+      Then Euler integration updates the angle:
+      \begin{equation*}
+        \theta_{t+1} = \theta_t + \dot{\theta}_{t+1}\Delta t
+      \end{equation*}
+
+      Time advances as:
+      \begin{equation*}
+        t_{t+1} = t_t + \Delta t
+      \end{equation*}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \pdfbookmark[1]{Pendulum Observation}{pendulum-observation}
+  \frametitle{Pendulum Observation}
+  \begin{center}
+    \begin{minipage}{.8\textwidth}
+      The pendulum observation returns normalised features as follows
+      \begin{equation*}
+        h(
+        \begin{pmatrix}
+          \theta \\
+          \dot{\theta} \\
+          t
+        \end{pmatrix}
+        )
+        =
+        \begin{pmatrix}
+          \cos\theta \\
+          \sin\theta \\
+          \frac{\dot{\theta}}{\theta_{\max}}
+        \end{pmatrix}
+      \end{equation*}
+
+      Here are some numerical examples using $\theta_{\max} = 8$
+      \begin{center}
+        \begin{tabular}{lccc}\toprule
+          \textbf{example} &
+          1 &
+          2 &
+          3 \\\midrule
+          \textbf{state} &
+          $\begin{pmatrix} 0 \\ 0 \\ 0\end{pmatrix}$ &
+          $\begin{pmatrix} 0 \\ 0 \\ \frac{1}{2}\end{pmatrix}$ &
+          $\begin{pmatrix} \frac{\pi}{2} \\ 0 \\ 0\end{pmatrix}$ \\
+          \textbf{observation} &
+          $\begin{pmatrix} 1 \\ 0 \\ 0\end{pmatrix}$ &
+          $\begin{pmatrix} 1 \\ 0 \\ \frac{1}{16}\end{pmatrix}$ &
+          $\begin{pmatrix} 0 \\ 1 \\ 0\end{pmatrix}$ \\\bottomrule
+        \end{tabular}
+      \end{center}
+    \end{minipage}
   \end{center}
 \end{frame}
 
