@@ -243,9 +243,10 @@
   \frametitle{Pendulum Reward}
   \begin{center}
     \begin{minipage}{.8\textwidth}
+      The reward function uses the wrapped angle $\theta_{\text{wrapped}} = ((\theta + \pi) \bmod 2\pi) - \pi$
       \begin{itemize}
         % TODO: use control input instead of alpha_m
-        \item \textbf{Reward:} $-(\theta^2 + \frac{1}{10}\dot{\theta}^2 + \frac{1}{10000} \alpha_m)$
+        \item \textbf{Reward:} $-(\theta_{\text{wrapped}}^2 + \frac{1}{10}\dot{\theta}^2 + \frac{1}{10000}\alpha_m)$
         \item \textbf{Episode:} Truncate after 200 steps, no termination.
       \end{itemize}
     \end{minipage}
