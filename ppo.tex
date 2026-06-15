@@ -133,7 +133,7 @@
     \begin{minipage}{.2\textwidth}
       Action
       \begin{itemize}
-        \item $\alpha_m$, motor angular acceleration
+        \item $u_m$, motor control input
       \end{itemize}
     \end{minipage}
     \begin{minipage}{.32\textwidth}
@@ -173,20 +173,21 @@
   \frametitle{Pendulum State Update}
   \begin{center}
     \begin{minipage}{.8\textwidth}
-      Total angular acceleration is the sum of motor input and gravity:
+      The motor output depends on the action $u_m$
+      \begin{equation*}
+        \alpha_m = u_m \,\alpha_{m,\max}
+      \end{equation*}
+
+      Total angular acceleration is the sum of motor output and gravity:
       \begin{equation*}
         \ddot{\theta}_t = \alpha_m + \frac{g}{\ell}\sin(\theta_t)
       \end{equation*}
 
-      Using a time step $\Delta t$, Euler integration first updates the angular velocity:
-      \begin{equation*}
-        \dot{\theta}_{t+1} = \dot{\theta}_t + \ddot{\theta}_t \Delta t
-      \end{equation*}
-
-      Then Euler integration updates the angle:
-      \begin{equation*}
-        \theta_{t+1} = \theta_t + \dot{\theta}_{t+1}\Delta t
-      \end{equation*}
+      Using a time step $\Delta t$, Euler integration updates angular velocity and angle:
+      \begin{align*}
+        \dot{\theta}_{t+1} &= \dot{\theta}_t + \ddot{\theta}_t \Delta t\\
+        \theta_{t+1} &= \theta_t + \dot{\theta}_{t+1}\Delta t
+      \end{align*}
 
       Time advances as:
       \begin{equation*}
@@ -245,8 +246,7 @@
     \begin{minipage}{.8\textwidth}
       The reward function uses the wrapped angle $\theta_{\text{wrapped}} = ((\theta + \pi) \bmod 2\pi) - \pi$
       \begin{itemize}
-        % TODO: use control input instead of alpha_m
-        \item \textbf{Reward:} $-(\theta_{\text{wrapped}}^2 + \frac{1}{10}\dot{\theta}^2 + \frac{1}{10000}\alpha_m)$
+        \item \textbf{Reward:} $-(\theta_{\text{wrapped}}^2 + \frac{1}{10}\dot{\theta}^2 + \frac{1}{10000}u_m)$
         \item \textbf{Episode:} Truncate after 200 steps, no termination.
       \end{itemize}
     \end{minipage}
